@@ -1,19 +1,20 @@
-{   Copyright 2009 - Magno Machado Paulo (magnomp@gmail.com)
+{   Copyright 2009, 2010 - Magno Machado Paulo (magnomp@gmail.com)
 
     This file is part of Emballo.
 
     Emballo is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
 
     Emballo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>. }
+    You should have received a copy of the GNU Lesser General Public
+    License along with Emballo.
+    If not, see <http://www.gnu.org/licenses/>. }
 
 unit EBDIRegistry;
 
@@ -30,7 +31,7 @@ type
       ConstructorAddress: Pointer); overload;
     procedure RegisterFactory(Guid: TGUID; Injectable: TInjectableClass); overload;
     procedure RegisterFactory(Guid: TGUID; Instance: IInterface); overload;
-    function Instantiate(Owner: TObject; Field: IFieldData): IInterface;
+    function Instantiate(GUID: TGUID): IInterface;
     procedure Clear;
   end;
 
@@ -42,7 +43,7 @@ type
       ConstructorAddress: Pointer); overload;
     procedure RegisterFactory(Guid: TGUID; Injectable: TInjectableClass); overload;
     procedure RegisterFactory(Guid: TGUID; Instance: IInterface); overload;
-    function Instantiate(Owner: TObject; Field: IFieldData): IInterface;
+    function Instantiate(GUID: TGUID): IInterface;
     procedure Clear;
   public
     constructor Create;
@@ -75,8 +76,7 @@ begin
   FFactories := TInterfaceList.Create;
 end;
 
-function TDIRegistryImpl.Instantiate(Owner: TObject;
-  Field: IFieldData): IInterface;
+function TDIRegistryImpl.Instantiate(GUID: TGUID): IInterface;
 var
   i: Integer;
   Factory: IFactory;
@@ -85,9 +85,11 @@ begin
   for i := 0 to FFactories.Count - 1 do
   begin
     Factory := FFactories[i] as IFactory;
-    Result := Factory.Instantiate(Owner, Field);
-    if Assigned(Result) then
+    if IsEqualGUID(Factory.GUID, GUID) then
+    begin
+      Result := Factory.GetInstance;
       Break;
+    end;
   end;
 end;
 

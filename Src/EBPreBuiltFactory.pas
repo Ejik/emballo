@@ -1,19 +1,20 @@
-{   Copyright 2009 - Magno Machado Paulo (magnomp@gmail.com)
+{   Copyright 2009, 2010 - Magno Machado Paulo (magnomp@gmail.com)
 
     This file is part of Emballo.
 
     Emballo is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
 
     Emballo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>. }
+    You should have received a copy of the GNU Lesser General Public
+    License along with Emballo.
+    If not, see <http://www.gnu.org/licenses/>. }
 
 unit EBPreBuiltFactory;
 
@@ -28,10 +29,11 @@ type
   TPreBuiltFactory = class(TInterfacedObject, IFactory)
   private
     FInstance: IInterface;
-    FGuid: TGUID;
-    function Instantiate(Owner: TObject; Field: IFieldData): IInterface;
+    FGUID: TGUID;
+    function GetInstance: IInterface;
+    function GetGUID: TGUID;
   public
-    constructor Create(Guid: TGUID; const Instance: IInterface);
+    constructor Create(GUID: TGUID; const Instance: IInterface);
   end;
 
 implementation
@@ -41,22 +43,23 @@ uses
 
 { TPreBuiltFactory }
 
-constructor TPreBuiltFactory.Create(Guid: TGUID; const Instance: IInterface);
+constructor TPreBuiltFactory.Create(GUID: TGUID; const Instance: IInterface);
 begin
   if not Supports(Instance, Guid) then
     raise EInvalidType.Create('Pre built instance must support specified guid');
 
-  FGuid := Guid;
+  FGUID := Guid;
   FInstance := Instance;
 end;
 
-function TPreBuiltFactory.Instantiate(Owner: TObject;
-  Field: IFieldData): IInterface;
+function TPreBuiltFactory.GetGUID: TGUID;
 begin
-  if IsEqualGUID(Field.Guid, FGuid) then
-    Result := FInstance
-  else
-    Result := Nil;
+  Result := FGUID;
+end;
+
+function TPreBuiltFactory.GetInstance: IInterface;
+begin
+  Result := FInstance;
 end;
 
 end.

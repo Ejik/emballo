@@ -1,19 +1,20 @@
-{   Copyright 2009 - Magno Machado Paulo (magnomp@gmail.com)
+{   Copyright 2009, 2010 - Magno Machado Paulo (magnomp@gmail.com)
 
     This file is part of Emballo.
 
     Emballo is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
 
     Emballo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>. }
+    You should have received a copy of the GNU Lesser General Public
+    License along with Emballo.
+    If not, see <http://www.gnu.org/licenses/>. }
 
 unit EBInjectableFactoryTests;
 
@@ -25,7 +26,7 @@ uses
 type
   TInjectableFactoryTests = class(TTestCase)
   published
-    procedure TestInstantiate;
+    procedure TestGetInstance;
     procedure TestConstructor;
   end;
 
@@ -48,11 +49,6 @@ type
 
   end;
 
-  TMyClass = class
-    FInterface: IMyInterface;
-    FUnsupported: IUnsupportedInterface;
-  end;
-
 { TInjectableFactoryTests }
 
 procedure TInjectableFactoryTests.TestConstructor;
@@ -69,20 +65,14 @@ begin
   Factory := TInjectableFactory.Create(IMyInterface, TMyInjectable);
 end;
 
-procedure TInjectableFactoryTests.TestInstantiate;
+procedure TInjectableFactoryTests.TestGetInstance;
 var
   Factory: IFactory;
   MyInterface: IInterface;
-  Fields: TFieldsData;
 begin
-  Fields := EnumerateFields(TMyClass);
-
   Factory := TInjectableFactory.Create(IMyInterface, TMyInjectable);
-  MyInterface := Factory.Instantiate(Nil, Fields[0]);
+  MyInterface := Factory.GetInstance;
   CheckTrue(Assigned(MyInterface));
-
-  MyInterface := Factory.Instantiate(Nil, Fields[1]);
-  CheckFalse(Assigned(MyInterface));
 end;
 
 initialization

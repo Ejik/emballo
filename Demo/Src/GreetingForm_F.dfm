@@ -1,11 +1,11 @@
 object GreetingForm: TGreetingForm
-  Left = 287
-  Top = 385
+  Left = 0
+  Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Greeting demo'
   ClientHeight = 96
-  ClientWidth = 221
+  ClientWidth = 222
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

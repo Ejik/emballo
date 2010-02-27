@@ -1,19 +1,20 @@
-{   Copyright 2009 - Magno Machado Paulo (magnomp@gmail.com)
+{   Copyright 2009, 2010 - Magno Machado Paulo (magnomp@gmail.com)
 
     This file is part of Emballo.
 
     Emballo is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
 
     Emballo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>. }
+    You should have received a copy of the GNU Lesser General Public
+    License along with Emballo.
+    If not, see <http://www.gnu.org/licenses/>. }
 
 unit EBDynamicFactoryTests;
 
@@ -25,7 +26,7 @@ uses
 type
   TDynamicFactoryTests = class(TTestCase)
   published
-    procedure TestInstantiate;
+    procedure TestGetInstance;
     procedure TestConstructor;
   end;
 
@@ -52,12 +53,6 @@ type
     constructor Create;
   end;
 
-  TSomeObject = class
-  private
-    FMyInterface: IMyInterface;
-    FOtherInterface: IOtherInterface;
-  end;
-
 { TDynamicFactoryTests }
 
 procedure TDynamicFactoryTests.TestConstructor;
@@ -72,20 +67,15 @@ begin
   end;
 end;
 
-procedure TDynamicFactoryTests.TestInstantiate;
+procedure TDynamicFactoryTests.TestGetInstance;
 var
   Factory: IFactory;
-  Fields: TFieldsData;
   I: IInterface;
 begin
-  Fields := EnumerateFields(TSomeObject);
   Factory := TDynamicFactory.Create(IMyInterface, TMyClass, @TMyClass.Create);
-  I := Factory.Instantiate(Nil, Fields[0]);
+  I := Factory.GetInstance;
   CheckTrue(Assigned(I));
   CheckEquals(10, (I as IMyInterface).GetTestValue);
-
-  I := Factory.Instantiate(Nil, Fields[1]);
-  CheckFalse(Assigned(I));
 end;
 
 { TMyClass }
