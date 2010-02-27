@@ -46,7 +46,7 @@ uses
 
 begin
   Application.Initialize;
-  ReportMemoryLeaksOnShutdown := True;
+  //ReportMemoryLeaksOnShutdown := True;
   if IsConsole then
     TextTestRunner.RunRegisteredTests
   else

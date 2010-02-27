@@ -28,7 +28,7 @@ type
     FTimeService: ITimeService;
     function Greeting(const Name: String): String;
   public
-    constructor Create;
+    constructor Create();
   end;
 
 implementation
