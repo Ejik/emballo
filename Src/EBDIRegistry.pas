@@ -32,6 +32,10 @@ type
     procedure RegisterFactory(Guid: TGUID; Injectable: TInjectableClass); overload;
     procedure RegisterFactory(Guid: TGUID; Instance: IInterface); overload;
     function Instantiate(GUID: TGUID): IInterface;
+    procedure RegisterFactorySingleton(Guid: TGUID; ClassType: TClass;
+      ConstructorAddress: Pointer); overload;
+    procedure RegisterFactorySingleton(Guid: TGUID; Injecable: TInjectableClass); overload;
+
     procedure Clear;
   end;
 
@@ -44,6 +48,9 @@ type
     procedure RegisterFactory(Guid: TGUID; Injectable: TInjectableClass); overload;
     procedure RegisterFactory(Guid: TGUID; Instance: IInterface); overload;
     function Instantiate(GUID: TGUID): IInterface;
+    procedure RegisterFactorySingleton(Guid: TGUID; ClassType: TClass;
+      ConstructorAddress: Pointer); overload;
+    procedure RegisterFactorySingleton(Guid: TGUID; Injecable: TInjectableClass); overload;
     procedure Clear;
   public
     constructor Create;
@@ -54,7 +61,8 @@ function GetDIRegistry: IDIRegistry;
 implementation
 
 uses
-  SysUtils, EBDynamicFactory, EBInjectableFactory, EBPreBuiltFactory;
+  SysUtils, EBDynamicFactory, EBInjectableFactory, EBPreBuiltFactory,
+  EBSingletonFactory;
 
 var
   _DIRegistry: IDIRegistry;
@@ -112,6 +120,18 @@ end;
 procedure TDIRegistryImpl.RegisterFactory(Guid: TGUID; Instance: IInterface);
 begin
   RegisterFactory(TPreBuiltFactory.Create(Guid, Instance));
+end;
+
+procedure TDIRegistryImpl.RegisterFactorySingleton(Guid: TGUID;
+  ClassType: TClass; ConstructorAddress: Pointer);
+begin
+  RegisterFactory(TSingletonFactory.Create(TDynamicFactory.Create(Guid, ClassType, ConstructorAddress)));
+end;
+
+procedure TDIRegistryImpl.RegisterFactorySingleton(Guid: TGUID;
+  Injecable: TInjectableClass);
+begin
+  RegisterFactory(TSingletonFactory.Create(TInjectableFactory.Create(Guid, Injecable)));
 end;
 
 initialization

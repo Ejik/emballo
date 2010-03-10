@@ -72,7 +72,7 @@ var
 begin
   Instance := TMyClass.Create;
   Factory := TPreBuiltFactory.Create(IMyInterface, Instance);
-  CheckTrue(Instance = Factory.GetInstance);
+  CheckSame(Instance, Factory.GetInstance);
 end;
 
 initialization

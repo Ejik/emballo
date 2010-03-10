@@ -55,6 +55,7 @@ contains
   EBInvalidTypeException in '..\Src\EBInvalidTypeException.pas',
   EBInjectable in '..\Src\EBInjectable.pas',
   EBInjectableFactory in '..\Src\EBInjectableFactory.pas',
-  EBPreBuiltFactory in '..\Src\EBPreBuiltFactory.pas';
+  EBPreBuiltFactory in '..\Src\EBPreBuiltFactory.pas',
+  EBSingletonFactory in '..\Src\EBSingletonFactory.pas';
 
 end.
